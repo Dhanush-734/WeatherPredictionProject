@@ -1,0 +1,1038 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg-color: #0F172A;
+    --card-bg: rgba(30, 41, 59, 0.45);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-color: #FFFFFF;
+    --text-muted: #94A3B8;
+    --primary-blue: #2563EB;
+    --cyan: #06B6D4;
+    --success-green: #10B981;
+    --warning-orange: #F59E0B;
+    --error-red: #EF4444;
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --font-sans: 'Inter', sans-serif;
+    --font-display: 'Outfit', sans-serif;
+}
+
+/* Global Styles */
+.stApp {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    font-family: var(--font-sans) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+
+/* Hide default streamlit header elements for a clean dashboard look */
+header[data-testid="stHeader"] {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--card-border) !important;
+}
+
+/* Sidebar configuration */
+section[data-testid="stSidebar"] {
+    background-color: #090D1A !important;
+    border-right: 1px solid var(--card-border) !important;
+}
+
+/* Custom styled Sidebar header & footer */
+.sidebar-title {
+    font-family: var(--font-display) !important;
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.sidebar-footer {
+    border-top: 1px solid var(--card-border);
+    padding-top: 20px;
+    margin-top: 20px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-align: center;
+    font-family: var(--font-sans);
+}
+
+.sidebar-footer-author {
+    color: #FFFFFF;
+    font-weight: 600;
+    margin: 5px 0;
+}
+
+/* Style the navigation radio buttons inside sidebar */
+div[role="radiogroup"] {
+    background: transparent !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+div[role="radiogroup"]>label {
+    background: rgba(30, 41, 59, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+    margin-bottom: 8px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+/* Hide presentation radio circles */
+div[role="radiogroup"]>label>div:first-child {
+    display: none !important;
+}
+
+/* Hover and checked states for sidebar radio navigation items */
+div[role="radiogroup"]>label:hover {
+    background: rgba(37, 99, 235, 0.12) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    transform: translateX(4px);
+}
+
+div[role="radiogroup"]>label:has(input:checked) {
+    background: linear-gradient(135deg, var(--primary-blue), var(--cyan)) !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.25) !important;
+}
+
+div[role="radiogroup"]>label:has(input:checked) div[data-testid="stMarkdownContainer"] p {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+div[role="radiogroup"]>label div[data-testid="stMarkdownContainer"] p {
+    color: #E2E8F0 !important;
+    font-size: 0.95rem !important;
+    margin: 0 !important;
+}
+
+/* Style metrics as premium glassmorphic cards */
+div[data-testid="stMetric"] {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 18px !important;
+    padding: 20px 24px !important;
+    box-shadow: var(--card-shadow) !important;
+    backdrop-filter: blur(8px) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+div[data-testid="stMetric"]:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 40px 0 rgba(37, 99, 235, 0.2) !important;
+    border-color: rgba(37, 99, 235, 0.4) !important;
+}
+
+div[data-testid="stMetricLabel"]>div {
+    color: var(--text-muted) !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+div[data-testid="stMetricValue"]>div {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+    font-family: var(--font-display) !important;
+    margin-top: 4px !important;
+}
+
+/* Prevent double wrapping of metrics in styled columns */
+div[data-testid="column"]:has(div[data-testid="stMetric"]) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Turn normal columns with charts, tables or inputs into premium glassmorphism cards */
+div[data-testid="column"]:has(div.js-plotly-plot),
+div[data-testid="column"]:has(div[data-testid="stWidgetLabel"]),
+div[data-testid="column"]:has(div[data-testid="stForm"]) {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 18px !important;
+    padding: 24px !important;
+    box-shadow: var(--card-shadow) !important;
+    backdrop-filter: blur(8px) !important;
+    margin-bottom: 20px !important;
+    transition: border-color 0.3s ease !important;
+}
+
+div[data-testid="column"]:has(div.js-plotly-plot):hover,
+div[data-testid="column"]:has(div[data-testid="stWidgetLabel"]):hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Custom styled container using Streamlit container border=True */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 18px !important;
+    padding: 24px !important;
+    box-shadow: var(--card-shadow) !important;
+    backdrop-filter: blur(8px) !important;
+    margin-bottom: 20px !important;
+}
+
+/* Style Streamlit Action Buttons with premium Blue -> Cyan gradient */
+div[data-testid="stButton"] button,
+div[data-testid="stDownloadButton"] button {
+    background: linear-gradient(135deg, var(--primary-blue), var(--cyan)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    font-family: var(--font-sans) !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    width: auto !important;
+}
+
+div[data-testid="stButton"] button:hover,
+div[data-testid="stDownloadButton"] button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4) !important;
+    background: linear-gradient(135deg, #1D4ED8, #0891B2) !important;
+}
+
+div[data-testid="stButton"] button:active,
+div[data-testid="stDownloadButton"] button:active {
+    transform: translateY(0) !important;
+}
+
+/* Form input elements styling */
+div[data-testid="stSelectbox"]>div[data-baseweb="select"]>div,
+div[data-testid="stTextInput"] input,
+div[data-testid="stNumberInput"] input {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-family: var(--font-sans) !important;
+}
+
+div[data-testid="stSelectbox"]>div[data-baseweb="select"]>div:hover,
+div[data-testid="stTextInput"] input:hover,
+div[data-testid="stNumberInput"] input:hover {
+    border-color: rgba(6, 182, 212, 0.4) !important;
+}
+
+div[data-testid="stSelectbox"]>div[data-baseweb="select"]>div:focus-within,
+div[data-testid="stTextInput"] input:focus,
+div[data-testid="stNumberInput"] input:focus {
+    border-color: var(--cyan) !important;
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15) !important;
+}
+
+/* Style select dropdown popover lists */
+div[role="listbox"] {
+    background-color: #1E293B !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+}
+
+div[role="listbox"] [role="option"] {
+    color: white !important;
+}
+
+div[role="listbox"] [role="option"]:hover,
+div[role="listbox"] [aria-selected="true"] {
+    background-color: rgba(37, 99, 235, 0.2) !important;
+    color: #38BDF8 !important;
+}
+
+/* Style Streamlit sliders */
+div[data-testid="stSlider"] {
+    padding-bottom: 8px;
+}
+
+div[data-testid="stSlider"] div[role="slider"] {
+    background-color: var(--cyan) !important;
+    border: 2px solid white !important;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.4) !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Style active track on slider */
+div[data-testid="stSlider"] div[data-val] {
+    background-color: var(--primary-blue) !important;
+}
+
+/* Custom visual helper classes */
+.hero-banner {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--cyan) 100%);
+    padding: 35px 30px;
+    border-radius: 18px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.25);
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.hero-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.hero-icon {
+    font-size: 45px;
+    margin-right: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.hero-title-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-title {
+    color: #FFFFFF !important;
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    letter-spacing: -0.02em;
+    font-family: var(--font-display) !important;
+    line-height: 1.2 !important;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    margin: 6px 0 0 0 !important;
+    padding: 0 !important;
+    font-family: var(--font-sans) !important;
+}
+
+.hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hero-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.hero-badge:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Custom HTML table styles */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    background: rgba(30, 41, 59, 0.3);
+    margin: 15px 0;
+}
+
+table.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    color: #E2E8F0;
+    font-family: var(--font-sans);
+}
+
+table.custom-table th {
+    background: rgba(15, 23, 42, 0.7);
+    color: #38BDF8;
+    padding: 14px 16px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+table.custom-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.9rem;
+}
+
+table.custom-table tr:nth-child(even) {
+    background: rgba(30, 41, 59, 0.15);
+}
+
+table.custom-table tr:hover {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+/* KPI Custom Cards */
+.kpi-card {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 15px;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(37, 99, 235, 0.2);
+    border-color: rgba(37, 99, 235, 0.4);
+}
+
+.kpi-icon-container {
+    background: rgba(37, 99, 235, 0.12);
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.kpi-icon {
+    font-size: 22px;
+}
+
+.kpi-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-label {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.kpi-value {
+    color: #FFFFFF;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 4px;
+    font-family: var(--font-display);
+}
+
+/* Workflow Flowchart */
+.workflow-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 25px 0;
+    gap: 8px;
+    width: 100%;
+}
+
+.workflow-step {
+    background: rgba(30, 41, 59, 0.35);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 110px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.workflow-step:hover {
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+}
+
+.step-num {
+    background: var(--primary-blue);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin: 0 auto 6px auto;
+}
+
+.step-title {
+    font-weight: 700;
+    color: #38BDF8;
+    font-size: 0.85rem;
+}
+
+.step-desc {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.workflow-arrow {
+    color: var(--cyan);
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Technology Grid */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.tech-card {
+    background: rgba(30, 41, 59, 0.3);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 18px 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.tech-card:hover {
+    border-color: rgba(37, 99, 235, 0.35);
+    background: rgba(30, 41, 59, 0.5);
+    transform: translateY(-3px);
+}
+
+.tech-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.tech-name {
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-family: var(--font-display);
+}
+
+.tech-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+/* Clean Developer Team Card */
+.dev-card-simple {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.75));
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 20px;
+    padding: 24px 28px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.dev-card-simple::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563eb, #38bdf8, #8b5cf6);
+}
+
+.dev-badge-simple {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.dev-title-simple {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 16px !important;
+}
+
+.dev-team-list {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dev-name-pill {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.dev-name-pill:hover {
+    background: rgba(37, 99, 235, 0.2);
+    border-color: #38bdf8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+}
+
+font-weight: 700;
+color: #ffffff;
+font-family: var(--font-display);
+margin-bottom: 4px;
+}
+
+.dev-member-role {
+    font-size: 0.82rem;
+    color: #38bdf8;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.dev-member-tags {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.dev-tag {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+
+/* Live Weather Selection Styling */
+.map-panel {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+iframe[title*="streamlit_folium"],
+div[data-testid="stFolium"] iframe,
+div[data-testid="stCustomComponentV1"] iframe,
+iframe[src*="component"] {
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
+    background-color: #d5dadc !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+
+.selection-summary {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0 20px;
+}
+
+.selection-pill {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(6, 182, 212, 0.18));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+}
+
+.selection-pill span {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.selection-pill strong {
+    color: #FFFFFF;
+    font-size: 1rem;
+    margin-top: 4px;
+}
+
+.weather-hero-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(6, 182, 212, 0.16));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 20px;
+    margin: 10px 0 20px;
+}
+
+.weather-hero-icon {
+    width: 72px;
+    height: 72px;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2));
+}
+
+.weather-hero-card h3 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 1.3rem;
+}
+
+.weather-subtitle {
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.weather-temp {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #38BDF8;
+    margin-top: 8px;
+}
+
+.forecast-card,
+.tomorrow-card {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.forecast-time {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.forecast-icon {
+    width: 54px;
+    height: 54px;
+    margin: 8px 0;
+}
+
+.forecast-temp {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.forecast-desc {
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.forecast-meta {
+    color: #38BDF8;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.tomorrow-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #FFFFFF;
+}
+
+.tomorrow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.tomorrow-metric {
+    background: rgba(30, 41, 59, 0.45);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tomorrow-metric span {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.tomorrow-metric strong {
+    color: #FFFFFF;
+    margin-top: 6px;
+    font-size: 1rem;
+}
+
+/* Dynamic AI Prediction Card Styles */
+.ai-prediction-card {
+    border-radius: 18px;
+    padding: 24px;
+    margin: 20px 0;
+    box-shadow: var(--card-shadow);
+    border-width: 1px;
+    border-style: solid;
+    backdrop-filter: blur(8px);
+}
+
+.ai-prediction-card.diff-small {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.ai-prediction-card.diff-medium {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.ai-prediction-card.diff-high {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+.ai-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-family: var(--font-display);
+}
+
+.ai-card-title.diff-small {
+    color: var(--success-green);
+}
+
+.ai-card-title.diff-medium {
+    color: var(--warning-orange);
+}
+
+.ai-card-title.diff-high {
+    color: var(--error-red);
+}
+
+.ai-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.ai-card-metric {
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-card-metric-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.ai-card-metric-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 4px;
+    color: white;
+    font-family: var(--font-display);
+}
+
+/* Beautiful Styled Prediction Outcome Card */
+.prediction-outcome {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+    margin: 20px 0;
+}
+
+.prediction-outcome-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.prediction-outcome-title {
+    font-size: 1rem;
+    color: var(--success-green);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.prediction-outcome-value {
+    font-size: 2.5rem;
+    color: #FFFFFF;
+    font-weight: 800;
+    margin-top: 8px;
+    font-family: var(--font-display);
+}
+
+/* Model Info Badge and Card elements */
+.model-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.model-badge {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+}
+
+.model-badge-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.model-badge-val {
+    font-size: 0.95rem;
+    color: white;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.badge-success-text {
+    color: var(--success-green);
+}
+
+/* Custom Tabs Styling */
+div[data-testid="stTabBar"] {
+    background: rgba(30, 41, 59, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    border: 1px solid var(--card-border) !important;
+}
+
+div[data-testid="stTabBar"] button {
+    border-radius: 8px !important;
+    color: var(--text-muted) !important;
+    font-family: var(--font-sans) !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+    padding: 8px 16px !important;
+}
+
+div[data-testid="stTabBar"] button:hover {
+    color: #FFFFFF !important;
+}
+
+div[data-testid="stTabBar"] button[aria-selected="true"] {
+    background: var(--primary-blue) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+iframe {
+    min-height: 700px !important;
+}
+
+iframe {
+    height: 650px !important;
+    width: 100% !important;
+    border: none;
+}
