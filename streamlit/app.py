@@ -21,7 +21,7 @@ import pandas as pd
 import plotly.express as px
 import joblib
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 def clean_html(html_str: str) -> str:
     """Strips leading and trailing whitespace from every line of HTML to prevent Markdown code block formatting bugs."""
@@ -221,10 +221,16 @@ def safe_encode_season(season_name):
 
 def get_next_hours_forecast(forecast_data, count=3):
     entries = forecast_data.get("list", []) if forecast_data else []
+    tz_offset = forecast_data.get("city", {}).get("timezone", 0) if forecast_data else 0
+    tz = timezone(timedelta(seconds=tz_offset)) if tz_offset else None
     slots = []
 
     for item in entries[:count]:
-        timestamp = datetime.fromtimestamp(item["dt"])
+        if tz:
+            timestamp = datetime.fromtimestamp(item["dt"], tz=timezone.utc).astimezone(tz)
+        else:
+            timestamp = datetime.fromtimestamp(item["dt"])
+
         main = item.get("main", {})
         weather = item.get("weather", [{}])[0]
         rain = item.get("rain", {}).get("3h", 0)
@@ -244,9 +250,24 @@ def get_tomorrow_summary(forecast_data):
     if not entries:
         return None
 
-    tomorrow = datetime.now() + timedelta(days=1)
-    tomorrow_date = tomorrow.date()
-    items = [item for item in entries if datetime.fromtimestamp(item["dt"]).date() == tomorrow_date]
+    tz_offset = forecast_data.get("city", {}).get("timezone", 0) if forecast_data else 0
+    tz = timezone(timedelta(seconds=tz_offset)) if tz_offset else None
+
+    if tz:
+        now_city = datetime.now(timezone.utc).astimezone(tz)
+    else:
+        now_city = datetime.now()
+
+    tomorrow_date = (now_city + timedelta(days=1)).date()
+
+    items = []
+    for item in entries:
+        if tz:
+            item_date = datetime.fromtimestamp(item["dt"], tz=timezone.utc).astimezone(tz).date()
+        else:
+            item_date = datetime.fromtimestamp(item["dt"]).date()
+        if item_date == tomorrow_date:
+            items.append(item)
 
     if not items:
         items = entries[:8]
