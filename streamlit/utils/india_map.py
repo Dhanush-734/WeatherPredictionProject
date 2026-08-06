@@ -1,7 +1,15 @@
 from pathlib import Path
-import geopandas as gpd
-import plotly.graph_objects as go
-from streamlit_plotly_events import plotly_events
+try:
+    import geopandas as gpd
+except ImportError:
+    gpd = None
+
+try:
+    import plotly.graph_objects as go
+    from streamlit_plotly_events import plotly_events
+except ImportError:
+    go = None
+    plotly_events = None
 
 
 # Current project path
@@ -55,6 +63,8 @@ STATE_CITY_MAP = {
 
 
 def load_state_geojson():
+    if gpd is None:
+        return None
 
     print("GeoJSON PATH:", GEOJSON_PATH)
     print("FOUND:", GEOJSON_PATH.exists())
@@ -77,6 +87,8 @@ def load_state_geojson():
 
 from typing import Optional
 def build_india_map(selected_state: Optional[str] = None):
+    if go is None:
+        return None
     gdf = load_state_geojson()
     if gdf is None:
         return None
