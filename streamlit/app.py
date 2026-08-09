@@ -1,4 +1,5 @@
 
+import os
 import sys
 from pathlib import Path
 
@@ -71,42 +72,122 @@ le_weather = joblib.load(ROOT / "models" / "le_weather.pkl")
 le_day = joblib.load(ROOT / "models" / "le_day.pkl")
 le_season = joblib.load(ROOT / "models" / "le_season.pkl")
 # Retrieve OpenWeather API key securely from environment variables or Streamlit secrets
-API_KEY = os.environ.get("OPENWEATHER_API_KEY") or (st.secrets.get("OPENWEATHER_API_KEY", "") if hasattr(st, "secrets") else "")
+API_KEY = os.environ.get("OPENWEATHER_API_KEY", "")
+if not API_KEY:
+    try:
+        API_KEY = st.secrets.get("OPENWEATHER_API_KEY", "")
+    except Exception:
+        API_KEY = ""
 import requests
 
-def get_live_weather(city):
+def get_fallback_live_weather(city):
+    lookup_city = CITY_MODEL_FALLBACK.get(city, city)
+    city_df = df[df["City"].str.lower() == lookup_city.lower()]
+    if city_df.empty:
+        city_df = df[df["City"].str.lower() == city.lower()]
+    if city_df.empty:
+        city_df = df
 
-    url = "https://api.openweathermap.org/data/2.5/weather"
+    sample = city_df.sample(1).iloc[0]
+    weather_type = str(sample["Weather"])
+    icon_map = {
+        "Clear": "01d",
+        "Cloudy": "03d",
+        "Rain": "10d",
+        "Thunderstorm": "11d",
+        "Drizzle": "09d",
+        "Snow": "13d",
+        "Mist": "50d",
+        "Fog": "50d",
+        "Haze": "50d"
+    }
+    icon_code = icon_map.get(weather_type, "02d")
 
-    params = {
-        "q": city,
-        "appid": API_KEY,
-        "units": "metric"
+    return {
+        "coord": {"lon": 77.59, "lat": 12.97},
+        "weather": [{
+            "id": 800,
+            "main": weather_type,
+            "description": f"{weather_type.lower()} skies",
+            "icon": icon_code
+        }],
+        "main": {
+            "temp": float(sample["Temperature"]),
+            "feels_like": float(sample["Temperature"]) + 1.2,
+            "temp_min": float(sample["Temperature"]) - 2.0,
+            "temp_max": float(sample["Temperature"]) + 3.0,
+            "pressure": int(sample["Pressure"]),
+            "humidity": int(sample["Humidity"])
+        },
+        "visibility": 10000,
+        "wind": {"speed": float(sample["Wind_Speed"]), "deg": 180},
+        "clouds": {"all": int(sample["Cloud_Cover"])},
+        "rain": {"1h": float(sample.get("Rainfall", 0))},
+        "dt": int(datetime.now().timestamp()),
+        "name": city,
+        "is_fallback": True
     }
 
-    response = requests.get(url, params=params)
+def get_fallback_forecast(city):
+    live = get_fallback_live_weather(city)
+    base_temp = live["main"]["temp"]
+    
+    list_slots = []
+    now = datetime.now()
+    for i in range(8):
+        future_time = now + timedelta(hours=(i + 1) * 3)
+        slot_temp = base_temp + ((i % 3) - 1) * 1.5
+        list_slots.append({
+            "dt": int(future_time.timestamp()),
+            "main": {
+                "temp": round(slot_temp, 1),
+                "temp_min": round(slot_temp - 2, 1),
+                "temp_max": round(slot_temp + 2, 1),
+                "pressure": live["main"]["pressure"],
+                "humidity": min(100, max(20, live["main"]["humidity"] + (i * 2 - 4)))
+            },
+            "weather": live["weather"],
+            "clouds": live["clouds"],
+            "wind": live["wind"],
+            "rain": {"3h": round(live.get("rain", {}).get("1h", 0) * 0.8, 1)},
+            "dt_txt": future_time.strftime("%Y-%m-%d %H:%M:%S")
+        })
+    
+    return {
+        "cod": "200",
+        "message": 0,
+        "cnt": len(list_slots),
+        "list": list_slots,
+        "city": {"name": city, "country": "IN"}
+    }
 
-    if response.status_code == 200:
-        return response.json()
-
-    return None
-
+def get_live_weather(city):
+    key = st.session_state.get("user_api_key") or API_KEY
+    if key and key.strip():
+        url = "https://api.openweathermap.org/data/2.5/weather"
+        params = {"q": city, "appid": key.strip(), "units": "metric"}
+        try:
+            response = requests.get(url, params=params, timeout=4)
+            if response.status_code == 200:
+                data = response.json()
+                data["is_fallback"] = False
+                return data
+        except Exception:
+            pass
+    return get_fallback_live_weather(city)
 
 def get_forecast(city):
-    url = "https://api.openweathermap.org/data/2.5/forecast"
-
-    params = {
-        "q": city,
-        "appid": API_KEY,
-        "units": "metric"
-    }
-
-    response = requests.get(url, params=params)
-
-    if response.status_code == 200:
-        return response.json()
-
-    return None
+    key = st.session_state.get("user_api_key") or API_KEY
+    if key and key.strip():
+        url = "https://api.openweathermap.org/data/2.5/forecast"
+        params = {"q": city, "appid": key.strip(), "units": "metric"}
+        try:
+            response = requests.get(url, params=params, timeout=4)
+            if response.status_code == 200:
+                return response.json()
+        except Exception:
+            pass
+    return get_fallback_forecast(city)
 
 
 DEFAULT_STATE = "Karnataka"
@@ -387,6 +468,17 @@ page = st.sidebar.radio(
         "ℹ About"
     ]
 )
+
+with st.sidebar.expander("🔑 OpenWeather API Key", expanded=False):
+    user_key = st.text_input(
+        "API Key",
+        value=st.session_state.get("user_api_key", ""),
+        type="password",
+        help="Optional: Enter your free OpenWeatherMap API key for live real-time API weather data."
+    )
+    if user_key != st.session_state.get("user_api_key", ""):
+        st.session_state["user_api_key"] = user_key
+        st.rerun()
 
 # ============================================
 # DASHBOARD
@@ -824,6 +916,8 @@ elif page == "🌍 Live Weather":
     forecast = get_forecast(city)
 
     if weather and forecast:
+        if weather.get("is_fallback"):
+            st.info("💡 **Simulated Weather Mode**: Displaying dataset weather data for this location. You can enter a free OpenWeather API Key in the sidebar expander for real-time live API weather data!")
         temperature = weather["main"]["temp"]
         humidity = weather["main"]["humidity"]
         pressure = weather["main"]["pressure"]
