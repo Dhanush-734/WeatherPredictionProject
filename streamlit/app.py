@@ -70,7 +70,8 @@ le_city = joblib.load(ROOT / "models" / "le_city.pkl")
 le_weather = joblib.load(ROOT / "models" / "le_weather.pkl")
 le_day = joblib.load(ROOT / "models" / "le_day.pkl")
 le_season = joblib.load(ROOT / "models" / "le_season.pkl")
-API_KEY = "1becb0fb56249486d02f3d4f89203315"
+# Retrieve OpenWeather API key securely from environment variables or Streamlit secrets
+API_KEY = os.environ.get("OPENWEATHER_API_KEY") or (st.secrets.get("OPENWEATHER_API_KEY", "") if hasattr(st, "secrets") else "")
 import requests
 
 def get_live_weather(city):

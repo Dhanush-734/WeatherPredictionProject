@@ -41,6 +41,9 @@ venv.bak/
 
 # Streamlit local credentials & secrets
 .streamlit/secrets.toml
+.env
+.env.*
+.secrets
 
 # OS generated files
 .DS_Store
